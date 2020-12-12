@@ -1,43 +1,28 @@
 package com.jeyun.test.controller;
 
-import java.sql.Connection;
+import javax.annotation.Resource;
 
-import javax.sql.DataSource;
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
-
-import com.jeyun.test.Test;
+import com.jeyun.test.service.testService;
 
 @Controller
 public class testController {
 
-	// 루트컨테이너에서 빈(Bean)을 받아와서 자동으로 넣어줌
-	@Inject
-	private DataSource dataSource;
-
-	// "/list" URI에 대한 요청 처리
-	@RequestMapping(value = "/list.do")
-	public String home2(@ModelAttribute Test test) {
-
-		try {
-			Connection conn = (Connection) dataSource.getConnection();
-			System.out.println("성공 : " + conn);
-
-		} catch (Exception ex) {
-			System.out.println("실패..!");
-			ex.printStackTrace();
-		}
-
-		return "/board/list";
+	@Resource(name="testServie")
+	testService service;
+	
+	@RequestMapping("/list.do")
+	public String test1() throws Exception {			
+		System.out.println(service.serviceTest().get(1).getID()+"두번쨰값");
+		return "main/test";
 	}
 
+	
 	@RequestMapping("/test.do")
-	public String test() throws Exception {
+	public String test2() throws Exception {
 		System.out.println("여기까지 왔다");
 		return "main/test";
 	}
