@@ -7,10 +7,40 @@
                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
                 http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 	
+	
 
+	
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="2"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/egovframework/example/" p:suffix=".jsp"/>
+	
+	
+	 <!-- 인터셉터 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="interceptors">
+            <list> 
+             	<ref bean="localeChangeInterceptor" />        
+                <ref bean="AuthenticInterceptor" />              
+            </list>
+        </property>
+    </bean>
+    
+     <!-- 권한 세션체크 부분 로직 -->
+    <bean id="AuthenticInterceptor" class="com.jeyun.test.interceptor.AuthenticInterceptor"/>
+	
+	 <!-- 쿠키를 이용한 Locale 이용시 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> -->
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="language" />
+    </bean>
+	
+	<!-- 인터셉터 적용할 경로설정 -->
+	<mvc:interceptors>
+    	<mvc:interceptor>
+       	 <mvc:mapping path="/**"/> 
+       	 <bean class="com.jeyun.test.interceptor.AuthenticInterceptor" />
+    	</mvc:interceptor>
+	</mvc:interceptors>
+    		
 	
 	
 	<bean id="tilesViewResolver"
