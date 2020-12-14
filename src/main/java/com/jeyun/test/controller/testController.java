@@ -26,5 +26,11 @@ public class testController {
 		System.out.println("여기까지 왔다");
 		return "main/test";
 	}
-
+	
+		@RequestMapping(value="admin.do")
+		public String admin() throws Exception {
+			System.out.println(" admin만허용 ");
+			return "main/login.tiles";
+		}
+		
 }
